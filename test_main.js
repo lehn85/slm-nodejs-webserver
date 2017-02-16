@@ -5,11 +5,13 @@ var options = {
     index: 'custom_index.html'
 };
 
+app.set('port', (process.env.PORT || 5000));
+
 //Route handler
 app.use("/", express.static("app", options));
 
-app.listen(3000, function() {
-    console.log('Start listen on port 3000');
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
 
 // var mysql = require('mysql');
