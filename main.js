@@ -1,4 +1,5 @@
 var express = require('express');
+var datarouter = require('./data_router');
 var app = express();
 
 var options = {
@@ -9,6 +10,7 @@ app.set('port', (process.env.PORT || 5000));
 
 //Route handler
 app.use("/", express.static("app", options));
+app.use('/data', datarouter);
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
