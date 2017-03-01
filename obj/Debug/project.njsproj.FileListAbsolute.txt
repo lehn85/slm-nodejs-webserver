@@ -1,2 +1,0 @@
-E:\NodeJsProjects\solar-panel-monitor\nodejs-webserver\obj\Debug\project.njsprojResolveAssemblyReference.cache
-E:\NodeJsProjects\solar-panel-monitor\nodejs-webserver\bin\Microsoft.NodejsTools.WebRole.dll
