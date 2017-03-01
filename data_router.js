@@ -97,7 +97,7 @@ router.post('/' + api_key, function (req, res) {
         }
 
         // a log
-        console.info("Connected to PostgreSQL server at " + process.env.DATABASE_URL + " on port " + process.env.PGPORT);
+        console.info("Connected to PostgreSQL server at " + pgConfig.host + " on port " + pgConfig.port);
 
         // insert query
         client.query('INSERT INTO solarpanel VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', data, function (err, result) {
