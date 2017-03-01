@@ -5,7 +5,11 @@ var router = express.Router();
 //var sqlite3 = require('sqlite3').verbose();
 //var db = new sqlite3.Database('sqlite-db/temphumid.db');
 
-console.info(process.env);
+//console.info(process.env);
+
+///// extract pg database_url
+var url = require('url');
+var dburl = url.parse(process.env.DATABASE_URL);
 
 ////// postgreSQL
 var pg = require('pg');
@@ -15,14 +19,15 @@ var pg = require('pg');
 // note: all config is optional and the environment variables
 // will be read if the config is not present
 var pgConfig = {
-    user: process.env.PGUSER, //env var: PGUSER
-    database: process.env.PGDATABASE, //env var: PGDATABASE
-    password: process.env.PGPASSWORD, //env var: PGPASSWORD
-    host: process.env.DATABASE_URL, // Server hosting the postgres database
-    port: process.env.PGPORT, //env var: PGPORT
+    user: dburl.auth.substr(0, dburl.auth.indexOf(":")),
+    password: dburl.auth.substr(dburl.auth.indexOf(":") + 1),
+    database: dburl.path.substr(1), //env var: PGDATABASE    
+    host: dburl.hostname, // Server hosting the postgres database
+    port: dburl.port, //env var: PGPORT
     max: 10, // max number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
+console.info("pgConfig=" + JSON.stringify(pgConfig));
 
 //this initializes a connection pool
 //it will keep idle connections open for a 30 seconds

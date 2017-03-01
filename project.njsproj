@@ -14,12 +14,8 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <NodejsPort>5000</NodejsPort>
     <StartWebBrowser>False</StartWebBrowser>
-    <Environment>PGUSER=root
-PGPASSWORD=letm
-PGDATABASE=root
-PGPORT=5432
-#DATABASE_URL=127.0.0.1
-DATABASE_URL=10.1.10.105
+    <Environment>#DATABASE_URL=postgresql://root:letm@10.1.10.105:5432/root
+DATABASE_URL=postgresql://root:letm@127.0.0.1:5432/root
 API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
