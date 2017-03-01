@@ -1,10 +1,6 @@
 ﻿var express = require('express');
 var router = express.Router();
 
-////// db sqlite3 for testing
-//var sqlite3 = require('sqlite3').verbose();
-//var db = new sqlite3.Database('sqlite-db/temphumid.db');
-
 //console.info(process.env);
 
 ///// extract pg database_url
