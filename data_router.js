@@ -68,6 +68,13 @@ router.get('/latest/:minute', function (req, res) {
 });
 
 var api_key = process.env.API_WRITE_KEY;
+if (!api_key) {
+    console.warn("API_WRITE_KEY not found, use default (insert). Use POST to /data/insert JSON: {data:[]}");
+    api_key = "insert";
+}
+else console.info("API_WRITE_KEY=" + api_key);
+
+// route insert to database
 router.post('/' + api_key, function (req, res) {
     var data = null;
     if (req.body && req.body.data)

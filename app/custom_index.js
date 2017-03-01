@@ -1,5 +1,3 @@
-/// <reference path="Chart.min.js"/>
-
 (function () {
     var app = angular.module("app", []);
 
@@ -12,17 +10,17 @@
             function (response) {
                 console.info(response);
                 var list = response.data;
-                config.data.datasets[0] = {
-                    label: "My First dataset",
+                config.data.datasets = [{
+                    label: "Watt per m2",
                     backgroundColor: window.chartColors.red,
                     borderColor: window.chartColors.red,
                     data: list.map(function (v, i, l) {
                         return v.watt;
                     })
-                };
+                }];
                 config.data.labels = list.map(function (v, i, l) {
                     return v.time;
-                });                
+                });
                 c1.update();
             },
             function (exception) {
@@ -31,27 +29,9 @@
     });
 })();
 
-var MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 var config = {
     type: 'line',
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "My First dataset",
-            backgroundColor: window.chartColors.red,
-            borderColor: window.chartColors.red,
-            data: [
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor(),
-                randomScalingFactor()
-            ],
-            fill: false,
-        }]
-    },
+    data: {},
     options: {
         responsive: true,
         title: {
@@ -70,15 +50,13 @@ var config = {
             xAxes: [{
                 display: true,
                 scaleLabel: {
-                    display: true,
-                    labelString: 'Month'
+                    display: true,        
                 }
             }],
             yAxes: [{
                 display: true,
                 scaleLabel: {
-                    display: true,
-                    labelString: 'Value'
+                    display: true,                    
                 }
             }]
         }
