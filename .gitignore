@@ -2,6 +2,9 @@
 node_modules
 npm-debug.log
 .vscode
+typings
+bin
+obj
 
 # Local development
 *.env

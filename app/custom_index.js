@@ -7,22 +7,22 @@
         var ctx = $('#canvas');
         var c1 = new Chart(ctx, config);
 
-        var urlget = "/data/latest/1440";
+        var urlget = "/data/latest/5000";
         $http.get(urlget).then(
             function (response) {
+                console.info(response);
                 var list = response.data;
                 config.data.datasets[0] = {
                     label: "My First dataset",
                     backgroundColor: window.chartColors.red,
                     borderColor: window.chartColors.red,
                     data: list.map(function (v, i, l) {
-                        return v.field8;
+                        return v.watt;
                     })
                 };
                 config.data.labels = list.map(function (v, i, l) {
                     return v.time;
-                });
-                console.info(response);
+                });                
                 c1.update();
             },
             function (exception) {
