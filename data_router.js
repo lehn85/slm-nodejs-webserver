@@ -20,7 +20,7 @@ var pgConfig = {
     database: dburl.path.substr(1), //env var: PGDATABASE    
     host: dburl.hostname, // Server hosting the postgres database
     port: dburl.port, //env var: PGPORT
-    max: 10, // max number of clients in the pool
+    max: 5, // max number of clients in the pool
     idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 console.info("pgConfig=" + JSON.stringify(pgConfig));
@@ -48,23 +48,27 @@ router.use(function timeLog(req, res, next) {
 
 ////// internal route
 router.get('/latest/:minute', function (req, res) {
-    pool.connect(function (err, client, done) {
-        var time = Date.now() - req.params.minute * 60 * 1000;
-        client.query("SELECT * FROM solarpanel WHERE time>$1", [time], function (err, result) {
-            if (err)
-                res.send(JSON.stringify(err));
-            else
-                res.send(JSON.stringify(result.rows));
+    pool.connect()
+        .then(client => {
+            // a log
+            console.info("Connected to PostgreSQL server at " + pgConfig.host + " on port " + pgConfig.port);
+
+            var time = Date.now() - req.params.minute * 60 * 1000;
+            client.query("SELECT * FROM solarpanel WHERE time>$1", [time])
+                .then(result => {
+                    client.release();
+                    res.send(JSON.stringify(result.rows));
+                })
+                .catch(err => {
+                    client.release();
+                    res.status(403);
+                    res.send(JSON.stringify(err));
+                });
+        })
+        .catch(err => {
+            res.status(403) //forbiden error
+                .send('error connecting to db' + err);
         });
-    });
-    // sqlite3
-    //var time = Date.now() - req.params.minute * 60 * 1000;
-    //var v = db.all("SELECT * FROM tbl2 WHERE time>?", time, function (err, list) {
-    //    if (err)
-    //        res.send(JSON.stringify(err));
-    //    else
-    //        res.send(JSON.stringify(list));
-    //});
 });
 
 var api_key = process.env.API_WRITE_KEY;
@@ -96,32 +100,30 @@ router.post('/' + api_key, function (req, res) {
     }
     // to run a query we can acquire a client from the pool,
     // run a query on the client, and then return the client to the pool        
-    pool.connect(function (err, client, done) {
-        if (err) {
+    pool.connect()
+        .then(client => {
+            // a log
+            console.info("Connected to PostgreSQL server at " + pgConfig.host + " on port " + pgConfig.port);
+
+            // insert query
+            client.query('INSERT INTO solarpanel VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', data)
+                .then(result => {
+                    client.release();
+                    console.info("Inserted " + JSON.stringify(data));
+                    //console.info(JSON.stringify(result));
+                    res.send("OK");
+
+                })
+                .catch(err => {
+                    client.release();
+                    res.status(403) //forbiden error
+                        .send('error running query' + err);
+                });
+        })
+        .catch(err => {
             res.status(403) //forbiden error
                 .send('error connecting to db' + err);
-            return;
-        }
-
-        // a log
-        console.info("Connected to PostgreSQL server at " + pgConfig.host + " on port " + pgConfig.port);
-
-        // insert query
-        client.query('INSERT INTO solarpanel VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', data, function (err, result) {
-            //call `done(err)` to release the client back to the pool (or destroy it if there is an error)
-            done(err);
-
-            if (err) {
-                res.status(403) //forbiden error
-                    .send('error running query' + err);
-            }
-            else {
-                console.info("Inserted " + JSON.stringify(data));
-                //console.info(JSON.stringify(result));
-                res.send("OK");
-            }
         });
-    });
 });
 
 module.exports = router;

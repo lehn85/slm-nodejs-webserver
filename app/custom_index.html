@@ -1,17 +1,21 @@
 <html ng-app="app">
 
 <head>
-    <title>Main page</title>    
+    <title>Main page</title>
     <script src="libs/JQuery/jquery-1.11.3.js"></script>
     <script src="libs/Angular/angular.js"></script>
+    <script src="libs/moment.min.js"></script>
     <script src="libs/Chart.bundle.min.js"></script>
+    <script src="libs/angular-chart.js"></script>
     <script src="utils.js"></script>
     <script src="custom_index.js"></script>
 </head>
 
 <body>
     <div style="width:75%;" ng-controller="chartController">
-        <canvas id="canvas"></canvas>
+        <canvas id="line" class="chart chart-line" chart-data="data"
+                chart-series="series" chart-options="options"
+                chart-click="onClick"></canvas>
     </div>
 </body>
 

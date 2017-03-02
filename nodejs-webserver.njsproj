@@ -17,6 +17,7 @@
     <Environment>#DATABASE_URL=postgresql://root:letm@10.1.10.105:5432/root
 DATABASE_URL=postgresql://root:letm@127.0.0.1:5432/root
 API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
+    <Name>nodejs-webserver</Name>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
   <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
@@ -52,23 +53,23 @@ API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
     <Content Include="app\libs\bootstrap-3.3.5-dist\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="package.json" />
     <Content Include="README.md" />
-    <Compile Include="app\libs\AlertifyJS\alertify.js" />
-    <Compile Include="app\libs\AlertifyJS\alertify.min.js" />
-    <Compile Include="app\libs\Angular\angular-animate.min.js" />
-    <Compile Include="app\libs\Angular\angular-animation-counter.js" />
-    <Compile Include="app\libs\Angular\angular-aria.min.js" />
-    <Compile Include="app\libs\Angular\angular-material.js" />
-    <Compile Include="app\libs\Angular\angular-sanitize.min.js" />
-    <Compile Include="app\libs\Angular\angular-translate.js" />
-    <Compile Include="app\libs\Angular\angular.js" />
-    <Compile Include="app\libs\Angular\angular.panelresizer.js" />
-    <Compile Include="app\libs\Angular\angular.treeview.js" />
-    <Compile Include="app\libs\bootstrap-3.3.5-dist\js\bootstrap.js" />
-    <Compile Include="app\libs\bootstrap-3.3.5-dist\js\bootstrap.min.js" />
-    <Compile Include="app\libs\bootstrap-3.3.5-dist\js\npm.js" />
-    <Compile Include="app\libs\bootstrap-3.3.5-dist\ui-bootstrap-tpls-2.0.1.js" />
-    <Compile Include="app\libs\bootstrap-3.3.5-dist\ui-bootstrap-tpls-2.0.1.min.js" />
-    <Compile Include="app\libs\JQuery\jquery-1.11.3.js" />
+    <Content Include="app\libs\AlertifyJS\alertify.js" />
+    <Content Include="app\libs\AlertifyJS\alertify.min.js" />
+    <Content Include="app\libs\Angular\angular-animate.min.js" />
+    <Content Include="app\libs\Angular\angular-animation-counter.js" />
+    <Content Include="app\libs\Angular\angular-aria.min.js" />
+    <Content Include="app\libs\Angular\angular-material.js" />
+    <Content Include="app\libs\Angular\angular-sanitize.min.js" />
+    <Content Include="app\libs\Angular\angular-translate.js" />
+    <Content Include="app\libs\Angular\angular.js" />
+    <Content Include="app\libs\Angular\angular.panelresizer.js" />
+    <Content Include="app\libs\Angular\angular.treeview.js" />
+    <Content Include="app\libs\bootstrap-3.3.5-dist\js\bootstrap.js" />
+    <Content Include="app\libs\bootstrap-3.3.5-dist\js\bootstrap.min.js" />
+    <Content Include="app\libs\bootstrap-3.3.5-dist\js\npm.js" />
+    <Content Include="app\libs\bootstrap-3.3.5-dist\ui-bootstrap-tpls-2.0.1.js" />
+    <Content Include="app\libs\bootstrap-3.3.5-dist\ui-bootstrap-tpls-2.0.1.min.js" />
+    <Content Include="app\libs\JQuery\jquery-1.11.3.js" />
     <Compile Include="data_router.js" />
     <Compile Include="main.js" />
     <Compile Include="test_sqlite3.js" />

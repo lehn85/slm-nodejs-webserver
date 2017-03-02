@@ -1,67 +1,77 @@
 (function () {
-    var app = angular.module("app", []);
+    var app = angular.module("app", ['chart.js']);
 
     app.controller("chartController", function ($scope, $http) {
-        var ctx = $('#canvas');
-        var c1 = new Chart(ctx, config);
+
+        $scope.options = {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Chart.js Line Chart'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    type: 'time',
+                    time: {
+                        //unit: 'hour',
+                        format: "MMM DD hA",
+                        //displayFormats: {
+                        //    'hour': 'MMM DD hA',
+                        //}
+                    },
+                    scaleLabel: {
+                        display: true,
+                    }
+                }],
+                yAxes: [{
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                    }
+                }]
+            }
+        };
+        $scope.series = ['Watt'];
 
         var urlget = "/data/latest/5000";
         $http.get(urlget).then(
             function (response) {
                 console.info(response);
                 var list = response.data;
-                config.data.datasets = [{
-                    label: "Watt per m2",
-                    backgroundColor: window.chartColors.red,
-                    borderColor: window.chartColors.red,
-                    data: list.map(function (v, i, l) {
-                        return v.watt;
+                $scope.data = [
+                    list.map(function (v, i, l) {
+                        return {
+                            x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
+                            y: v.watt
+                        };
                     })
-                }];
-                config.data.labels = list.map(function (v, i, l) {
-                    return v.time;
-                });
-                c1.update();
+                ];
+                //$scope.data = [{
+                //    label: "Watt",
+                //    backgroundColor: window.chartColors.red,
+                //    borderColor: window.chartColors.red,
+                //    data: list.map(function (v, i, l) {
+                //        return {
+                //            x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
+                //            y: v.watt
+                //        };
+                //    })
+                //}];
+                $scope.$applyAsync();
             },
             function (exception) {
                 console.error(exception);
             });
     });
 })();
-
-var config = {
-    type: 'line',
-    data: {},
-    options: {
-        responsive: true,
-        title: {
-            display: true,
-            text: 'Chart.js Line Chart'
-        },
-        tooltips: {
-            mode: 'index',
-            intersect: false,
-        },
-        hover: {
-            mode: 'nearest',
-            intersect: true
-        },
-        scales: {
-            xAxes: [{
-                type: 'time',
-                time: {
-                    unit:'hour',
-                }
-            }],
-            yAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,                    
-                }
-            }]
-        }
-    }
-};
 
 //window.onload = function () {
 //    var ctx = document.getElementById("canvas").getContext("2d");
