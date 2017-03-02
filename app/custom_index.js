@@ -48,9 +48,9 @@ var config = {
         },
         scales: {
             xAxes: [{
-                display: true,
-                scaleLabel: {
-                    display: true,        
+                type: 'time',
+                time: {
+                    unit:'hour',
                 }
             }],
             yAxes: [{
