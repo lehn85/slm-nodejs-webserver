@@ -6,7 +6,6 @@ typings
 bin
 obj
 .vs
-project.njsproj
 self-learn
 
 # Local development
