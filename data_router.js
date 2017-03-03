@@ -47,6 +47,36 @@ router.use(function timeLog(req, res, next) {
 });
 
 ////// internal route
+
+// last data extract from db
+var lastData = null;
+pool.connect()
+    .then(client => {
+        // a log
+        console.info("Try getting last data");
+                
+        client.query("SELECT * FROM	solarpanel ORDER BY	time DESC LIMIT 1")
+            .then(result => {
+                client.release();
+                var data = result.rows && result.rows.length > 0 ? result.rows[0] : null;
+                if (data) {
+                    lastData = data;
+                    lastData.time = Number.parseInt(data.time);//postgreSQL return bigint as string
+                    console.info("LastData = " + JSON.stringify(lastData));
+                }
+            })
+            .catch(err => {
+                client.release();
+                console.error("error getting last data");
+            });
+    });
+
+// route /last
+router.get('/last', function (req, res) {
+    res.send(JSON.stringify(lastData));
+});
+
+// route /latest/:minute
 router.get('/latest/:minute', function (req, res) {
     pool.connect()
         .then(client => {
@@ -78,7 +108,7 @@ if (!api_key) {
 }
 else console.info("API_WRITE_KEY=" + api_key);
 
-// route insert to database
+// insert record to database
 router.post('/' + api_key, function (req, res) {
     var data = null;
     if (req.body && req.body.data)
@@ -98,6 +128,20 @@ router.post('/' + api_key, function (req, res) {
             .send("Data must be 9-element length");
         return;
     }
+
+    // save last data    
+    lastData = {
+        time: data[0],
+        temp: data[1],
+        humid: data[2],
+        volt1: data[3],
+        watt1: data[4],
+        volt2: data[5],
+        watt2: data[6],
+        watt: data[7],
+        watt_per_m2: data[8],
+    };
+
     // to run a query we can acquire a client from the pool,
     // run a query on the client, and then return the client to the pool        
     pool.connect()

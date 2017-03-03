@@ -11,11 +11,15 @@
     <script src="custom_index.js"></script>
 </head>
 
-<body>
-    <div style="width:75%;" ng-controller="chartController">
+<body ng-controller="chartController">
+    <div style="width:75%;" >
         <canvas id="line" class="chart chart-line" chart-data="data"
                 chart-series="series" chart-options="options"
+                chart-colors="colors"
                 chart-click="onClick"></canvas>
+    </div>
+    <div>
+        <p>Last update time: {{getLastUpdateTime()}}</p>
     </div>
 </body>
 

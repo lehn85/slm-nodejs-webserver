@@ -14,8 +14,8 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <NodejsPort>5000</NodejsPort>
     <StartWebBrowser>False</StartWebBrowser>
-    <Environment>#DATABASE_URL=postgresql://root:letm@10.1.10.105:5432/root
-DATABASE_URL=postgresql://root:letm@127.0.0.1:5432/root
+    <Environment>DATABASE_URL=postgresql://root:letm@10.1.10.105:5432/root
+#DATABASE_URL=postgresql://root:letm@127.0.0.1:5432/root
 API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
     <Name>nodejs-webserver</Name>
   </PropertyGroup>
@@ -92,6 +92,8 @@ API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
     <Folder Include="typings\" />
     <Folder Include="typings\globals\" />
     <Folder Include="typings\globals\node\" />
+    <Folder Include="typings\globals\socket.io-client\" />
+    <Folder Include="typings\globals\socket.io\" />
     <Folder Include="typings\globals\sqlite3\" />
     <Folder Include="typings\globals\uniq\" />
     <Folder Include="typings\modules\" />
@@ -102,6 +104,8 @@ API_WRITE_KEY=c68756ce4fe7be9681aefd4a8dc70c83</Environment>
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\socket.io-client\index.d.ts" />
+    <TypeScriptCompile Include="typings\globals\socket.io\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\sqlite3\index.d.ts" />
     <TypeScriptCompile Include="typings\globals\uniq\index.d.ts" />
     <TypeScriptCompile Include="typings\index.d.ts" />

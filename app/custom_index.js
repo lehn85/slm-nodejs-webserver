@@ -3,6 +3,8 @@
 
     app.controller("chartController", function ($scope, $http) {
 
+        $scope.getLastUpdateTime = getLastUpdateTime;
+
         $scope.options = {
             responsive: true,
             title: {
@@ -21,11 +23,9 @@
                 xAxes: [{
                     type: 'time',
                     time: {
-                        //unit: 'hour',
-                        format: "MMM DD hA",
-                        //displayFormats: {
-                        //    'hour': 'MMM DD hA',
-                        //}
+                        parser: function (utcMoment) {
+                            return utcMoment.utcOffset('+0300');
+                        }
                     },
                     scaleLabel: {
                         display: true,
@@ -40,9 +40,27 @@
             }
         };
         $scope.series = ['Watt'];
+        $scope.colors = [{
+            backgroundColor: "rgba(75,192,192,0.4)",
+            borderWidth: 5,
+            borderColor: "rgba(75,192,192,1)",
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderDashOffset: 0.0,
+            borderJoinStyle: 'miter',
+            pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 1,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 1,
+            pointHitRadius: 10,
+        }];
 
-        var urlget = "/data/latest/5000";
-        $http.get(urlget).then(
+        // get latest data (minute)
+        $http.get("/data/latest/5000").then(
             function (response) {
                 console.info(response);
                 var list = response.data;
@@ -70,6 +88,24 @@
             function (exception) {
                 console.error(exception);
             });
+
+        // get very last data
+        $http.get("/data/last").then(
+            function (response) {
+                console.info(response);
+                lastData = response.data;
+
+            },
+            function (exception) {
+                console.error(exception);
+            }
+            );
+
+        var lastData;
+
+        function getLastUpdateTime() {
+            return moment.utc(lastData.time).utcOffset("+0300").toString();
+        }
     });
 })();
 
