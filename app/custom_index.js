@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("app", ['chart.js']);
+    var app = angular.module("app", ['chart.js', 'angularjs-gauge']);
 
     app.controller("chartController", function ($scope, $http) {
 
@@ -93,18 +93,16 @@
         $http.get("/data/last").then(
             function (response) {
                 console.info(response);
-                lastData = response.data;
+                $scope.lastData = response.data;
 
             },
             function (exception) {
                 console.error(exception);
             }
-            );
-
-        var lastData;
+            );        
 
         function getLastUpdateTime() {
-            return moment.utc(lastData.time).utcOffset("+0300").toString();
+            return moment.utc($scope.lastData.time).utcOffset("+0300").toString();
         }
     });
 })();

@@ -7,12 +7,13 @@
     <script src="libs/moment.min.js"></script>
     <script src="libs/Chart.bundle.min.js"></script>
     <script src="libs/angular-chart.js"></script>
+    <script src="libs/angularjs-gauge.min.js"></script>
     <script src="utils.js"></script>
     <script src="custom_index.js"></script>
 </head>
 
 <body ng-controller="chartController">
-    <div style="width:75%;" >
+    <div style="width:75%;">
         <canvas id="line" class="chart chart-line" chart-data="data"
                 chart-series="series" chart-options="options"
                 chart-colors="colors"
@@ -20,6 +21,11 @@
     </div>
     <div>
         <p>Last update time: {{getLastUpdateTime()}}</p>
+        <ng-gauge type="full" 
+                  thick="5" value="lastData.temp" cap="round" label="Temperature" 
+                  append="oC" foreground-color="#ffcc66" 
+                  background-color="rgba(255,255,255, 0.4)" 
+                  ></ng-gauge>
     </div>
 </body>
 
