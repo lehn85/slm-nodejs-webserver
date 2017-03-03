@@ -1,5 +1,5 @@
 (function () {
-    var app = angular.module("app", ['chart.js', 'angularjs-gauge']);
+    var app = angular.module("app", ['chart.js', 'angular-dialgauge']);
 
     app.controller("chartController", function ($scope, $http) {
 
@@ -9,7 +9,7 @@
             responsive: true,
             title: {
                 display: true,
-                text: 'Chart.js Line Chart'
+                text: 'Solar panel'
             },
             tooltips: {
                 mode: 'index',
@@ -39,7 +39,7 @@
                 }]
             }
         };
-        $scope.series = ['Watt'];
+        $scope.series = ['Watt', 'Watt per m2'];
         $scope.colors = [{
             backgroundColor: "rgba(75,192,192,0.4)",
             borderWidth: 5,
@@ -57,7 +57,16 @@
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-        }];
+            data: [65, 59, 80, 81, 56, 55, 40],
+            spanGaps: false,
+        },
+        //{
+        //    backgroundColor: "rgba(75,192,192,0.4)",
+        //    borderWidth: 5,
+        //    borderColor: "rgba(255,0,0,1)",
+        //}
+        ];
+
 
         // get latest data (minute)
         $http.get("/data/latest/5000").then(
@@ -70,7 +79,13 @@
                             x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
                             y: v.watt
                         };
-                    })
+                    }),
+                     //list.map(function (v, i, l) {
+                     //    return {
+                     //        x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
+                     //        y: v.watt_per_m2
+                     //    };
+                     //})
                 ];
                 //$scope.data = [{
                 //    label: "Watt",
@@ -99,10 +114,12 @@
             function (exception) {
                 console.error(exception);
             }
-            );        
+            );
 
         function getLastUpdateTime() {
-            return moment.utc($scope.lastData.time).utcOffset("+0300").toString();
+            if ($scope.lastData)
+                return moment.utc($scope.lastData.time).utcOffset("+0300").toString();
+            else return "";
         }
     });
 })();
