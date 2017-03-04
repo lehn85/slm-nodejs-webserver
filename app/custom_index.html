@@ -9,6 +9,11 @@
     <script src="libs/Chart.bundle.min.js"></script>
     <script src="libs/angular-chart.js"></script>
     <script src="libs/angular-dialgauge.js"></script>
+
+    <link href="libs/bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="libs/bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+
     <script src="utils.js"></script>
     <script src="custom_index.js"></script>
     <style>
@@ -22,61 +27,27 @@
 
 <body ng-controller="chartController">
     <div>
-        <p>Last update time: {{getLastUpdateTime()}}</p>
-        <div class="dg">
-            <ng-dial-gauge scale-min="-40"
-                           scale-max="50"
+        <h1>A solar panel monitoring station in Minsk, Belarus</h1>
+        <p>
+            This is a test project. Solar panel is very small (60mmx30mm). Temperature and humidity (outdoor) are measured along with voltage and output power per m2.
+            Esp8266 is used to measure data from sensors. Data is sent to Node-red server running in a local server before being forwarded to server on internet.
+            Time is presented in local time in Belarus (GMT+3).
+        </p>
+        <p>
+            Source code:<br/>
+            <a href="https://github.com/lehn85/slm-monitoring-station-esp8266">Esp8266 C++ code</a><br/>
+            <a href="https://github.com/lehn85/slm-nodejs-webserver">Nodejs webserver</a>
+        </p>
+        <p>Last updated time: {{getLastUpdateTime()}}</p>
+        <div class="dg" ng-repeat="g in arrayGauges">
+            <ng-dial-gauge scale-min="{{g.min}}"
+                           scale-max="{{g.max}}"
                            border-width="1"
-                           ng-model="lastData.temp"
-                           title="Temperature"
+                           ng-model="g.value"
+                           title="{{g.title}}"
                            bar-color="red"
                            bar-width="6"
-                           units="oC"
-                           angle="135"
-                           rotate="180"
-                           line-cap="round"
-                           style="stroke:#000000;">
-            </ng-dial-gauge>
-        </div>
-        <div class="dg">
-            <ng-dial-gauge scale-min="0"
-                           scale-max="100"
-                           border-width="1"
-                           ng-model="lastData.humid"
-                           title="Humidity"
-                           bar-color="blue"
-                           bar-width="6"
-                           units="%"
-                           angle="135"
-                           rotate="180"
-                           line-cap="round"
-                           style="stroke:#000000;">
-            </ng-dial-gauge>
-        </div>
-        <div class="dg">
-            <ng-dial-gauge scale-min="0"
-                           scale-max="100"
-                           border-width="1"
-                           ng-model="lastData.volt1"
-                           title="Voltage"
-                           bar-color="blue"
-                           bar-width="6"
-                           units="W"
-                           angle="135"
-                           rotate="180"
-                           line-cap="round"
-                           style="stroke:#000000;">
-            </ng-dial-gauge>
-        </div>
-        <div class="dg">
-            <ng-dial-gauge scale-min="0"
-                           scale-max="100"
-                           border-width="1"
-                           ng-model="lastData.watt_per_m2"
-                           title="Power per m2"
-                           bar-color="blue"
-                           bar-width="6"
-                           units="W/m2"
+                           units="{{g.units}}"
                            angle="135"
                            rotate="180"
                            line-cap="round"
@@ -84,17 +55,18 @@
             </ng-dial-gauge>
         </div>
     </div>
-    <div style="width:50%;">
-        <canvas id="line" class="chart chart-line" chart-data="data.volt1"
-                chart-series="series.volt1" chart-options="options"
-                chart-colors="colors"
-                chart-click="onClick"></canvas>
-    </div>
-    <div style="width:50%;">
-        <canvas id="line" class="chart chart-line" chart-data="data.watt_per_m2"
-                chart-series="series.watt_per_m2" chart-options="options"
-                chart-colors="colors"
-                chart-click="onClick"></canvas>
+    <div class="panel panel-default"
+         style="width:50%"
+         ng-repeat="cd in arrayCharts">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{cd.title}}</h3>
+        </div>
+        <div class="panel-body">
+            <canvas id="line" class="chart chart-line" chart-data="cd.data"
+                    chart-series="cd.series" chart-options="cd.options"
+                    chart-colors="cd.colors"
+                    chart-click="onClick(cd)"></canvas>
+        </div>
     </div>
 </body>
 
