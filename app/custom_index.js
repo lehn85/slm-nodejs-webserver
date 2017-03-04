@@ -39,7 +39,10 @@
                 }]
             }
         };
-        $scope.series = ['Watt', 'Watt per m2'];
+        $scope.series = {
+            volt1: ['Voltage'],
+            watt_per_m2: ['Watt per m2'],
+        };
         $scope.colors = [{
             backgroundColor: "rgba(75,192,192,0.4)",
             borderWidth: 5,
@@ -67,37 +70,31 @@
         //}
         ];
 
+        $scope.data = {};
 
         // get latest data (minute)
         $http.get("/data/latest/5000").then(
             function (response) {
                 console.info(response);
                 var list = response.data;
-                $scope.data = [
+                $scope.data.volt1 = [
                     list.map(function (v, i, l) {
                         return {
                             x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
-                            y: v.watt
+                            y: v.volt1
                         };
                     }),
-                     //list.map(function (v, i, l) {
-                     //    return {
-                     //        x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
-                     //        y: v.watt_per_m2
-                     //    };
-                     //})
                 ];
-                //$scope.data = [{
-                //    label: "Watt",
-                //    backgroundColor: window.chartColors.red,
-                //    borderColor: window.chartColors.red,
-                //    data: list.map(function (v, i, l) {
-                //        return {
-                //            x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
-                //            y: v.watt
-                //        };
-                //    })
-                //}];
+
+                $scope.data.watt_per_m2 = [
+                    list.map(function (v, i, l) {
+                        return {
+                            x: moment.utc(Number.parseInt(v.time)), // postgreSQL return bigint as string
+                            y: v.watt_per_m2,
+                        };
+                    }),
+                ];
+
                 $scope.$applyAsync();
             },
             function (exception) {

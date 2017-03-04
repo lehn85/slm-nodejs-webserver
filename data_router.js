@@ -54,7 +54,7 @@ pool.connect()
     .then(client => {
         // a log
         console.info("Try getting last data");
-                
+
         client.query("SELECT * FROM	solarpanel ORDER BY	time DESC LIMIT 1")
             .then(result => {
                 client.release();
@@ -64,6 +64,7 @@ pool.connect()
                     lastData.time = Number.parseInt(data.time);//postgreSQL return bigint as string
                     console.info("LastData = " + JSON.stringify(lastData));
                 }
+                else console.info("No data");
             })
             .catch(err => {
                 client.release();
@@ -111,36 +112,16 @@ else console.info("API_WRITE_KEY=" + api_key);
 // insert record to database
 router.post('/' + api_key, function (req, res) {
     var data = null;
-    if (req.body && req.body.data)
-        data = req.body.data;
+    if (req.body)
+        data = req.body;
     if (!data) {
         res.status(403)
             .send("No data received");
         return;
     }
-    if (!(data instanceof Array)) {
-        res.status(403)
-            .send("Data is not array");
-        return;
-    }
-    if (data.length != 9) {
-        res.status(403)
-            .send("Data must be 9-element length");
-        return;
-    }
 
     // save last data    
-    lastData = {
-        time: data[0],
-        temp: data[1],
-        humid: data[2],
-        volt1: data[3],
-        watt1: data[4],
-        volt2: data[5],
-        watt2: data[6],
-        watt: data[7],
-        watt_per_m2: data[8],
-    };
+    lastData = data;
 
     // to run a query we can acquire a client from the pool,
     // run a query on the client, and then return the client to the pool        
@@ -150,11 +131,18 @@ router.post('/' + api_key, function (req, res) {
             console.info("Connected to PostgreSQL server at " + pgConfig.host + " on port " + pgConfig.port);
 
             // insert query
-            client.query('INSERT INTO solarpanel VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)', data)
+            client.query(
+                'INSERT INTO solarpanel(time,temp,humid,volt1,miliwatt1,volt2,miliwatt2,voltm,miliwattm,watt_per_m2) ' +
+                'VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',
+                [Date.now(),
+                    data.temp, data.humid,
+                    data.volt1, data.miliwatt1,
+                    data.volt2, data.miliwatt2,
+                    data.voltm, data.miliwattm,
+                    data.watt_per_m2])
                 .then(result => {
                     client.release();
                     console.info("Inserted " + JSON.stringify(data));
-                    //console.info(JSON.stringify(result));
                     res.send("OK");
 
                 })
