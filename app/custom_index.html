@@ -29,16 +29,20 @@
     <div>
         <h1>A solar panel monitoring station in Minsk, Belarus</h1>
         <p>
-            This is a test project. Solar panel is very small (60mmx30mm). Temperature and humidity (outdoor) are measured along with voltage and output power per m2.
-            Esp8266 is used to measure data from sensors. Data is sent to Node-red server running in a local server before being forwarded to server on internet.
-            Time is presented in local time in Belarus (GMT+3).
+            This is a test project for learning purpose. A board with Esp8266 is used to measure
+            no-load voltage and output power of a solar panel (size 60mmx30mm).
+            Temperature and humidity (outdoor) also are measured by sensor DTH22.
+            Esp8266 runs on a battery (not from solar panel, since it is too small).
+            Measured data is sent to Node-red server running in a local server before being forwarded to server on internet.
+            Server runs on Heroku server, uses a free plan. Server is written using Nodejs.<br/>
+            Time on this page is presented in local time in Belarus (GMT+3).
         </p>
         <p>
-            Source code:<br/>
-            <a href="https://github.com/lehn85/slm-monitoring-station-esp8266">Esp8266 C++ code</a><br/>
+            Source code:<br />
+            <a href="https://github.com/lehn85/slm-monitoring-station-esp8266">Esp8266 C++ code</a><br />
             <a href="https://github.com/lehn85/slm-nodejs-webserver">Nodejs webserver</a>
         </p>
-        <p>Last updated time: {{getLastUpdateTime()}}</p>
+        <p>Last measure time: {{getLastUpdateTime()}}</p>
         <div class="dg" ng-repeat="g in arrayGauges">
             <ng-dial-gauge scale-min="{{g.min}}"
                            scale-max="{{g.max}}"
