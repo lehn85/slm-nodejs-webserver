@@ -15,6 +15,7 @@ angular.module('angular-dialgauge', [
                 ngModel: '=',
                 scaleMin: '@',
                 scaleMax: '@',
+                digitNum: '@',
                 rotate: '@',
                 angle: '@',
                 units: '@',
@@ -66,6 +67,7 @@ angular.module('angular-dialgauge', [
                 var defaults = {                     // Default settings
                     scaleMin: 0,
                     scaleMax: 100,
+                    digitNum: 2,
                     rotate: 180,
                     angle: 225,
                     units: "",
@@ -103,11 +105,11 @@ angular.module('angular-dialgauge', [
 
                 $scope.getElementDimensions = function () {
                     var rect = $element[0].getBoundingClientRect();
-                    return {'h': rect.height, 'w': rect.width};
+                    return { 'h': rect.height, 'w': rect.width };
                 };
 
                 $scope.$watch($scope.getElementDimensions, function (newValue, oldValue) {
-                    if(newValue == null) {
+                    if (newValue == null) {
                         return;
                     }
 
@@ -118,7 +120,7 @@ angular.module('angular-dialgauge', [
                         center = c;
                         height = width = center * 2;
 
-                        if(relative) {
+                        if (relative) {
                             center = 50;
                             scaling = 'transform="scale(' + (height / 100) + ')"';
                         }
@@ -130,7 +132,7 @@ angular.module('angular-dialgauge', [
 
                 // Add a watch on the options structure.
                 // If anything changes, update the static path
-                $scope.$watch('options', function() {
+                $scope.$watch('options', function () {
                     parseParameters($scope.options);
 
                     // Update the static path for the gauge
@@ -145,6 +147,7 @@ angular.module('angular-dialgauge', [
                     'angle',
                     'scaleMin',
                     'scaleMax',
+                    'digitNum',
                     'lineCap',
                     'barWidth',
                     'barColor',
@@ -191,16 +194,16 @@ angular.module('angular-dialgauge', [
                     intermediateValue = currentValue;
                     currentValue = value;
                     timer = $interval(function () {
-                            var step = (currentValue - intermediateValue) / 10;
-                            if (Math.abs(step) < valWindow) {
-                                intermediateValue = currentValue;
-                                $interval.cancel(timer);
-                            }
-                            else {
-                                intermediateValue += step;
-                            }
-                            updateBar(intermediateValue);
-                        },
+                        var step = (currentValue - intermediateValue) / 10;
+                        if (Math.abs(step) < valWindow) {
+                            intermediateValue = currentValue;
+                            $interval.cancel(timer);
+                        }
+                        else {
+                            intermediateValue += step;
+                        }
+                        updateBar(intermediateValue);
+                    },
                         20, 100);
                 });
 
@@ -211,11 +214,11 @@ angular.module('angular-dialgauge', [
                         return;
                     }
 
-//                    console.log("Centre", center, cfg.dialWidth);
+                    //                    console.log("Centre", center, cfg.dialWidth);
                     var radius = center - cfg.dialWidth;
-//                    console.log("Radius", radius);
+                    //                    console.log("Radius", radius);
 
-//                    console.log("This is", this);
+                    //                    console.log("This is", this);
 
                     // Sanitise the rotation
                     // Rotation should start at the top, so we need to subtract 90 degrees
@@ -425,9 +428,9 @@ angular.module('angular-dialgauge', [
                     'fill="transparent"' +
                     '/>';
 
-                    if (newValue !== undefined) {
+                    if (newValue !== undefined && newValue != null) {
                         path += '<text text-anchor="middle" x="' + center + '" y="' + center + '">' +
-                        '<tspan class="dialgauge-value">' + Math.floor(newValue) + '</tspan>';
+                        '<tspan class="dialgauge-value">' + newValue.toFixed(cfg.digitNum) + '</tspan>';
                     }
 
                     if (cfg.units != undefined) {
@@ -437,7 +440,7 @@ angular.module('angular-dialgauge', [
 
 
                     $scope.gauge =
-                        $sce.trustAsHtml('<svg width="100%" height="100%"><g ' + scaling +'>' + staticPath + path +
+                        $sce.trustAsHtml('<svg width="100%" height="100%"><g ' + scaling + '>' + staticPath + path +
                         '</g></svg>');
                 }
 
@@ -461,16 +464,16 @@ angular.module('angular-dialgauge', [
                         dir = 1;
                     }
 
-                    return {sX: startX, sY: startY, eX: endX, eY: endY, dir: dir};
+                    return { sX: startX, sY: startY, eX: endX, eY: endY, dir: dir };
                 }
 
                 function parseParameters(cfgObject) {
-                    if(cfgObject == null) {
+                    if (cfgObject == null) {
                         return;
                     }
 
                     for (var key in defaults) {
-                        console.log("Checking ", key);
+                        //console.log("Checking ", key);
 
                         if (cfgObject[key] !== undefined) {
                             cfg[key] = cfgObject[key];
@@ -485,7 +488,7 @@ angular.module('angular-dialgauge', [
                                 cfg[key] = 0;
                             }
                         }
-                        else if (typeof defaults[key] === 'boolean' &&  typeof cfg[key] !== 'boolean') {
+                        else if (typeof defaults[key] === 'boolean' && typeof cfg[key] !== 'boolean') {
                             cfg[key] = cfg[key] === 'true' ? true : false;
                         }
                     }
@@ -498,7 +501,7 @@ angular.module('angular-dialgauge', [
                     }
 
                     relative = cfg.percent;
-                    if(relative == true) {
+                    if (relative == true) {
 
                     }
 

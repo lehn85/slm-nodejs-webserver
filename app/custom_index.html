@@ -12,20 +12,19 @@
     <script src="utils.js"></script>
     <script src="custom_index.js"></script>
     <style>
-       .dg{
-           display:inline-block;
-           width:150px;
-           height:150px;
-       }
+        .dg {
+            display: inline-block;
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 
-<body ng-controller="chartController">    
+<body ng-controller="chartController">
     <div>
         <p>Last update time: {{getLastUpdateTime()}}</p>
         <div class="dg">
-            <ng-dial-gauge id="gauge1"
-                           scale-min="-40"
+            <ng-dial-gauge scale-min="-40"
                            scale-max="50"
                            border-width="1"
                            ng-model="lastData.temp"
@@ -36,12 +35,11 @@
                            angle="135"
                            rotate="180"
                            line-cap="round"
-                           style="stroke:blue;font-weight:100;">
+                           style="stroke:#000000;">
             </ng-dial-gauge>
         </div>
         <div class="dg">
-            <ng-dial-gauge id="gauge1"
-                           scale-min="0"
+            <ng-dial-gauge scale-min="0"
                            scale-max="100"
                            border-width="1"
                            ng-model="lastData.humid"
@@ -52,7 +50,37 @@
                            angle="135"
                            rotate="180"
                            line-cap="round"
-                           style="stroke:blue;font-weight:100;">
+                           style="stroke:#000000;">
+            </ng-dial-gauge>
+        </div>
+        <div class="dg">
+            <ng-dial-gauge scale-min="0"
+                           scale-max="100"
+                           border-width="1"
+                           ng-model="lastData.watt"
+                           title="Power"
+                           bar-color="blue"
+                           bar-width="6"
+                           units="W"
+                           angle="135"
+                           rotate="180"
+                           line-cap="round"
+                           style="stroke:#000000;">
+            </ng-dial-gauge>
+        </div>
+        <div class="dg">
+            <ng-dial-gauge scale-min="0"
+                           scale-max="100"
+                           border-width="1"
+                           ng-model="lastData.watt_per_m2"
+                           title="Power per m2"
+                           bar-color="blue"
+                           bar-width="6"
+                           units="W/m2"
+                           angle="135"
+                           rotate="180"
+                           line-cap="round"
+                           style="stroke:#000000;">
             </ng-dial-gauge>
         </div>
     </div>
