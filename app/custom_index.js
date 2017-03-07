@@ -154,7 +154,7 @@
         $scope.arrayCharts = [chartData.temp, chartData.humid, chartData.volt, chartData.watt_per_m2];
 
         // get latest data (minute)
-        $http.get("/data/latest/5000").then(
+        $http.get("/data/latest/1440").then(
             function (response) {
                 console.info(response);
                 var list = response.data;
