@@ -1,4 +1,12 @@
-﻿var express = require('express');
+﻿/****
+ * Solar panel monitor - a learning project, monitors sensors and send to server
+ * Nodejs webserver module
+ * Created 2017 by Ngo Phuong Le
+ * https://github.com/lehn85/slm-nodejs-webserver
+ * All files are provided under the MIT license.
+ ****/
+
+var express = require('express');
 var router = express.Router();
 
 //console.info(process.env);
